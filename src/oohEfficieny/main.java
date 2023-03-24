@@ -1,6 +1,8 @@
 package oohEfficieny;
 
-import java.io.Serial;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -16,8 +18,10 @@ public class main {
 
         String db = "myWeirdDatabase";
 
-        ArrayList<SerialObjectification> objs = new ArrayList<SerialObjectification>();
+        ArrayList<SerialObjectification> objs = new ArrayList<>();
 
+        SerialObjectification currObject = new SerialObjectification();
+        objs.add(currObject.ReadClassFile(db));
 
 
         boolean running = true;
@@ -33,17 +37,27 @@ public class main {
             switch(menuSelect){
                 case "a":
                     System.out.println("Enter a name, age and height below");
-                    objs.add(new SerialObjectification(scnr.nextLine(), scnr.nextInt(), scnr.nextFloat()));
+                    String name = scnr.next();
+                    int age = scnr.nextInt();
+                    float height = scnr.nextFloat();
+                    objs.add(new SerialObjectification(name, age, height));
                     break;
                 case "p":
-                    objs = (ArrayList<SerialObjectification>) SerialObjectification.ReadClassFile(db);
                     for(SerialObjectification w: objs){
                         System.out.println(w.toString());
                     }
-
+                    break;
+                case "q":
+                    SerialObjectification.WriteClassFile(db, objs);
+                    System.out.println("Saving current session data...");
+                    running = false;
+                    break;
+                default:
+                    System.out.println("Not a proper selection!");
+                    break;
             }
         }while(running != false);
 
-
+        System.out.println("Shutting down...");
     }
 }
