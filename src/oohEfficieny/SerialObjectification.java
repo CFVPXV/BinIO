@@ -42,7 +42,7 @@ public class SerialObjectification implements Serializable {
             System.out.println(rf.getClass());
             SerialObjectification gnu = (SerialObjectification) rf.readObject();
             System.out.println(gnu.getClass());
-            return (SerialObjectification) rf.readObject();
+            return gnu;
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
