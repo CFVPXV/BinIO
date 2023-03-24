@@ -25,7 +25,7 @@ public class SerialObjectification implements Serializable {
 
         try {
             ObjectOutputStream wf = new ObjectOutputStream(new FileOutputStream(fname));
-            for(SerialObjectification w: arr) {
+            for(Object w: arr) {
                 wf.writeObject(w);
             }
             wf.flush();
@@ -35,19 +35,32 @@ public class SerialObjectification implements Serializable {
         }
     }
 
-    public SerialObjectification ReadClassFile(String fname) {
+    public ArrayList<SerialObjectification> ReadClassFile(String fname) {
+        ArrayList<SerialObjectification> arr = new ArrayList<>();
+        boolean cont = true;
+        try (ObjectInputStream rf = new ObjectInputStream(new FileInputStream(fname))){
 
-        try {
-            ObjectInputStream rf = new ObjectInputStream(new FileInputStream(fname));
-            System.out.println(rf.getClass());
-            SerialObjectification gnu = (SerialObjectification) rf.readObject();
-            System.out.println(gnu.getClass());
-            return gnu;
+            while (cont) {
+                Object obj = null;
+                try {
+                    obj =  rf.readObject();
+                } catch (IOException e) {
+                    break;
+                }
+                if (obj != null)
+                    arr.add((SerialObjectification) obj);
+                else
+                    cont = false;
+            }
+
+        } catch (EOFException e) {
+            return arr;
         } catch (IOException e) {
             throw new RuntimeException(e);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
         }
+        return arr;
     }
 
     @Override

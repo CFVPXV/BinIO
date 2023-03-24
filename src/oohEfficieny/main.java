@@ -1,7 +1,5 @@
 package oohEfficieny;
 
-import java.io.EOFException;
-import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -18,11 +16,10 @@ public class main {
 
         String db = "myWeirdDatabase";
 
-        ArrayList<SerialObjectification> objs = new ArrayList<>();
+        ArrayList<SerialObjectification> newObjs = new ArrayList<>();
 
         SerialObjectification currObject = new SerialObjectification();
-        objs.add(currObject.ReadClassFile(db));
-
+        newObjs = currObject.ReadClassFile(db);
 
         boolean running = true;
 
@@ -40,15 +37,15 @@ public class main {
                     String name = scnr.next();
                     int age = scnr.nextInt();
                     float height = scnr.nextFloat();
-                    objs.add(new SerialObjectification(name, age, height));
+                    newObjs.add(new SerialObjectification(name, age, height));
                     break;
                 case "p":
-                    for(SerialObjectification w: objs){
+                    for(Object w: newObjs){
                         System.out.println(w.toString());
                     }
                     break;
                 case "q":
-                    SerialObjectification.WriteClassFile(db, objs);
+                    SerialObjectification.WriteClassFile(db, newObjs);
                     System.out.println("Saving current session data...");
                     running = false;
                     break;
